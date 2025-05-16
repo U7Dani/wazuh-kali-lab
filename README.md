@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/de9f9cbf-4a2f-4d97-9d24-ade81ff2d0d9)
+
 # Wazuh + Kali Linux Integration Lab
 
 Este repositorio contiene una guía detallada para instalar y configurar **Wazuh** (versión 4.12.0) en un entorno local, junto con la integración de un agente instalado en **Kali Linux** para pruebas de laboratorio de ciberseguridad.
