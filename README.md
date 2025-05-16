@@ -44,12 +44,21 @@ Al finalizar, anota el **usuario y contraseña** mostrados:
 User: admin
 Password: <GENERADO>
 ```
+![image](https://github.com/user-attachments/assets/2cfa8845-be1d-4fc8-920a-469316f81c56)
+
 
 ### 3. Verifica el acceso al Dashboard
 Abre en tu navegador:
 ```text
 https://<IP_SERVIDOR>:443
 ```
+![image](https://github.com/user-attachments/assets/e1c61280-fbea-4d74-8a14-9d9ebfbb0cd5)
+
+![image](https://github.com/user-attachments/assets/ab42263e-7475-4d2c-b3ae-05c340a3ddfe)
+
+
+![image](https://github.com/user-attachments/assets/be0f96f7-1d12-4aef-80f4-dd25bf94de0d)
+
 
 ---
 
@@ -63,6 +72,7 @@ echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4
 sudo apt update
 sudo apt install wazuh-agent
 ```
+
 
 ### 2. Configura `/var/ossec/etc/ossec.conf`
 
@@ -101,6 +111,7 @@ sudo systemctl daemon-reexec
 sudo systemctl enable wazuh-agent
 sudo systemctl start wazuh-agent
 ```
+![image](https://github.com/user-attachments/assets/bb17bc72-8027-4ae2-addd-77eb90e20607)
 
 ---
 
@@ -134,7 +145,9 @@ sudo nmap -sS -p- 192.168.222.140
 - MITRE ATT&CK: T1046
 
 📸 Captura:  
-**![Nmap alerta](screenshots/nmap-detection.png)**
+![image](https://github.com/user-attachments/assets/313a3211-1962-428b-ba90-ae78894acd77)
+
+![image](https://github.com/user-attachments/assets/b8806990-e4b3-4e78-93e6-5a49c03f45f5)
 
 ---
 
@@ -147,7 +160,10 @@ sudo unicornscan -Iv 192.168.222.140:1-1000
 - MITRE ATT&CK: T1046
 
 📸 Captura:  
-**![Unicornscan alerta](screenshots/unicornscan-detection.png)**
+![image](https://github.com/user-attachments/assets/333c42ed-e551-4d99-9825-a3f4accccef4)
+![image](https://github.com/user-attachments/assets/660a4015-9caa-4fdd-b501-51368417614b)
+
+
 
 ---
 
@@ -160,7 +176,11 @@ sudo masscan 192.168.222.140 -p1-65535 --rate=1000
 - MITRE ATT&CK: T1595
 
 📸 Captura:  
-**![Masscan alerta](screenshots/masscan-detection.png)**
+![image](https://github.com/user-attachments/assets/531dc28f-d4b2-4555-bad5-b48c4b5ff911)
+![image](https://github.com/user-attachments/assets/3f1e550d-e3bf-4807-bf4e-9687f71d32a7)
+![image](https://github.com/user-attachments/assets/bcdbbed4-3105-42af-b985-ebb167cdae43)
+
+
 
 ---
 
@@ -173,7 +193,10 @@ sudo hping3 -S 192.168.222.140 -p 80 -c 100
 - MITRE ATT&CK: T1046
 
 📸 Captura:  
-**![Hping3 alerta](screenshots/hping3-detection.png)**
+![image](https://github.com/user-attachments/assets/541b7019-4f38-4c47-b587-1366cab4edb6)
+![image](https://github.com/user-attachments/assets/954b8255-0ccc-4b4d-ad3f-a1f6c3abe175)
+![image](https://github.com/user-attachments/assets/770a4d76-aa83-47bf-9e81-b6eeba509c21)
+
 
 ---
 
@@ -185,19 +208,10 @@ sudo cat /etc/shadow
 - Nivel: Medio (`rule.level: 3`)
 
 📸 Captura:  
-**![Sudo alerta](screenshots/sudo-shadow.png)**
+![image](https://github.com/user-attachments/assets/2a498f28-52af-44ee-a7e0-0fc31a29f3f9)
+![image](https://github.com/user-attachments/assets/64877a8a-6635-46eb-bb0f-d7115a65b118)
 
----
 
-#### ⚠️ 6. Logger personalizado
-```bash
-logger "Prueba de alerta personalizada desde Kali"
-```
-- Uso: Validar captura de eventos de sistema
-- Requiere configuración en `<localfile>`
-
-📸 Captura:  
-**![Logger alerta](screenshots/logger-test.png)**
 
 ---
 
