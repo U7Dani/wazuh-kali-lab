@@ -1,4 +1,5 @@
-![bffcf25d-d999-4ad5-85df-f8f40df3f27e](https://github.com/user-attachments/assets/86013625-4a1e-4aad-a0d8-c0f2dd78377a)
+![image](https://github.com/user-attachments/assets/30db051f-e186-4d3c-af19-c1bd5f697f1a)
+
 
 # 🛡️ Laboratorio Wazuh + Kali Linux + Suricata
 
@@ -25,6 +26,8 @@ Este proyecto documenta la instalación y configuración de un entorno de labora
 - IP: `192.168.222.128`
 - Suricata 7.x instalado
 - Filebeat instalado y configurado para enviar logs a Wazuh
+![image](https://github.com/user-attachments/assets/6353b6a1-d99d-406f-8b9d-4acf5edebeea)
+![image](https://github.com/user-attachments/assets/1b983246-0451-409a-a7c3-877379862a66)
 
 ---
 
