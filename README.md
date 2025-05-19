@@ -1,3 +1,4 @@
+![bffcf25d-d999-4ad5-85df-f8f40df3f27e](https://github.com/user-attachments/assets/86013625-4a1e-4aad-a0d8-c0f2dd78377a)
 
 # 🛡️ Laboratorio Wazuh + Kali Linux + Suricata
 
@@ -46,6 +47,10 @@ sudo bash ./wazuh-install.sh -a -o
 🔑 **Contraseña:** (anotada tras la instalación)  
 📡 **Dashboard:** https://192.168.222.140
 
+![444639744-e1c61280-fbea-4d74-8a14-9d9ebfbb0cd5](https://github.com/user-attachments/assets/ac85ee6b-0604-4c90-b105-f968ba7aea62)
+
+![444639435-2cfa8845-be1d-4fc8-920a-469316f81c56](https://github.com/user-attachments/assets/1bd273c7-134e-4e47-b37f-f8db65307a98)
+
 ---
 
 ### 📦 2. Instalar agente Wazuh en Kali
@@ -91,6 +96,7 @@ sudo systemctl daemon-reexec
 sudo systemctl enable wazuh-agent
 sudo systemctl start wazuh-agent
 ```
+![444640113-bb17bc72-8027-4ae2-addd-77eb90e20607](https://github.com/user-attachments/assets/5cb9a44c-ed6c-45b2-bccb-b3637214b7bf)
 
 ---
 
@@ -105,6 +111,7 @@ Verifica:
 ```bash
 sudo suricata -i eth0 -v
 ```
+![image](https://github.com/user-attachments/assets/d5528a13-d8ac-42e6-9901-b4a4e1b492c4)
 
 ### 📦 2. Instalar Filebeat
 ```bash
@@ -167,6 +174,19 @@ sudo filebeat test output
 | Escaneo masivo | Masscan | `masscan 192.168.222.140 -p1-65535 --rate=1000` | Detectado | T1595 |
 | DoS básico | Hping3 | `hping3 -S 192.168.222.140 -p 80 -c 100` | Detectado | T1046 |
 | Escalada de privilegios | sudo | `sudo cat /etc/shadow` | Detectado | T1068 |
+
+![444640578-313a3211-1962-428b-ba90-ae78894acd77](https://github.com/user-attachments/assets/b0212265-ddc8-4d12-a683-5c290c94b8be)
+![444640644-b8806990-e4b3-4e78-93e6-5a49c03f45f5](https://github.com/user-attachments/assets/b03fc115-bfe1-43e3-a963-531040bef3fd)
+![444641117-333c42ed-e551-4d99-9825-a3f4accccef4](https://github.com/user-attachments/assets/6810e838-9bd1-4311-a6d8-dacc4756139a)
+![444641538-660a4015-9caa-4fdd-b501-51368417614b](https://github.com/user-attachments/assets/4e86fe9e-fa32-43f6-9d5e-af46825b7480)
+![444641761-531dc28f-d4b2-4555-bad5-b48c4b5ff911](https://github.com/user-attachments/assets/2f1297cb-89dd-4d8f-97b6-032768d2caf8)
+![444641825-3f1e550d-e3bf-4807-bf4e-9687f71d32a7](https://github.com/user-attachments/assets/a1960b65-7648-4578-a4fe-7a3221499083)
+![444641997-541b7019-4f38-4c47-b587-1366cab4edb6](https://github.com/user-attachments/assets/0271d62e-77b7-4a6a-8152-b08890058d34)
+![444642105-bcdbbed4-3105-42af-b985-ebb167cdae43](https://github.com/user-attachments/assets/3dcae587-2290-457f-bead-9e47658e2109)
+![444642305-954b8255-0ccc-4b4d-ad3f-a1f6c3abe175](https://github.com/user-attachments/assets/a76f79cb-6e95-4f46-b1b9-5c3536d4d53b)
+![444643598-2a498f28-52af-44ee-a7e0-0fc31a29f3f9](https://github.com/user-attachments/assets/f435f8a2-1448-40d9-b855-671a498d5f9b)
+![444643798-64877a8a-6635-46eb-bb0f-d7115a65b118](https://github.com/user-attachments/assets/87445a56-af26-448a-81ff-4e25f1062aae)
+
 
 ---
 
