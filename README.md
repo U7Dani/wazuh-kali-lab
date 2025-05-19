@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/assets/30db051f-e186-4d3c-af19-c1bd5f697f1a)
+![Diseño sin título (1)](https://github.com/user-attachments/assets/23281877-4869-4acd-b258-0ed49be1431b)
+
 
 
 # 🛡️ Laboratorio Wazuh + Kali Linux + Suricata
