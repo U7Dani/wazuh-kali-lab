@@ -1,4 +1,5 @@
-![Diseño sin título (1)](https://github.com/user-attachments/assets/23281877-4869-4acd-b258-0ed49be1431b)
+![Diseño sin título](https://github.com/user-attachments/assets/a2240890-0a34-4e78-ba00-addc425b9768)
+
 
 
 
@@ -19,12 +20,12 @@ Este proyecto documenta la instalación y configuración de un entorno de labora
 - IP: `192.168.222.140`
 
 ### 🧪 Kali Red Team (Generador de alertas)
-- IP: `192.168.222.131`
+- IP: `xxx.xxx.xxx.xxx`
 - Herramientas ofensivas instaladas: `nmap`, `hping3`, `unicornscan`, `masscan`
 - Agente Wazuh instalado
 
 ### 🔍 Kali Purple (IDS)
-- IP: `192.168.222.128`
+- IP: `xxx.xxx.xxx.xxx`
 - Suricata 7.x instalado
 - Filebeat instalado y configurado para enviar logs a Wazuh
 ![image](https://github.com/user-attachments/assets/6353b6a1-d99d-406f-8b9d-4acf5edebeea)
@@ -49,7 +50,7 @@ sudo bash ./wazuh-install.sh -a -o
 
 🧠 **Usuario por defecto:** `admin`  
 🔑 **Contraseña:** (anotada tras la instalación)  
-📡 **Dashboard:** https://192.168.222.140
+📡 **Dashboard:** https://xxx.xxx.xxx.xxx
 
 ![444639744-e1c61280-fbea-4d74-8a14-9d9ebfbb0cd5](https://github.com/user-attachments/assets/ac85ee6b-0604-4c90-b105-f968ba7aea62)
 
@@ -173,10 +174,10 @@ sudo filebeat test output
 
 | Técnica | Herramienta | Comando | Estado | MITRE ID |
 |--------|-------------|---------|--------|----------|
-| Escaneo TCP SYN | Nmap | `nmap -sS -p- 192.168.222.140` | Detectado | T1046 |
-| Escaneo rápido | Unicornscan | `unicornscan -Iv 192.168.222.140:1-1000` | Detectado parcialmente | T1046 |
-| Escaneo masivo | Masscan | `masscan 192.168.222.140 -p1-65535 --rate=1000` | Detectado | T1595 |
-| DoS básico | Hping3 | `hping3 -S 192.168.222.140 -p 80 -c 100` | Detectado | T1046 |
+| Escaneo TCP SYN | Nmap | `nmap -sS -p- xxx.xxx.xxx.xxx` | Detectado | T1046 |
+| Escaneo rápido | Unicornscan | `unicornscan -Iv xxx.xxx.xxx.xxx:1-1000` | Detectado parcialmente | T1046 |
+| Escaneo masivo | Masscan | `masscan xxx.xxx.xxx.xxx -p1-65535 --rate=1000` | Detectado | T1595 |
+| DoS básico | Hping3 | `hping3 -S xxx.xxx.xxx.xxx -p 80 -c 100` | Detectado | T1046 |
 | Escalada de privilegios | sudo | `sudo cat /etc/shadow` | Detectado | T1068 |
 
 ![444640578-313a3211-1962-428b-ba90-ae78894acd77](https://github.com/user-attachments/assets/b0212265-ddc8-4d12-a683-5c290c94b8be)
@@ -218,7 +219,7 @@ sudo filebeat test output
 
 - **Comando específico**:
   ```
-  data.command : "/usr/bin/unicornscan -Iv 192.168.222.140:1-1000"
+  data.command : "/usr/bin/unicornscan -Iv xxx.xxx.xxx.xxx:1-1000"
   ```
 
 ---
@@ -234,6 +235,104 @@ sudo filebeat test output
   ```bash
   sudo systemctl restart wazuh-manager
   ```
+## 🦠 **Integración avanzada: Automatización de análisis en VirusTotal**
+
+### **¿Qué se consigue?**
+- **Automatización real:**  
+  Cada archivo extraído por Suricata es subido automáticamente a VirusTotal para su análisis en sandbox.
+- **Visibilidad instantánea:**  
+  El hash SHA256 y el enlace a VirusTotal quedan guardados para cada archivo, facilitando el análisis y respuesta.
+
+---
+
+### **¿Cómo se hace?**
+
+#### **1. Script automatizado en Kali Purple**
+
+Guarda este script como `/opt/upload_to_virustotal.py` y pon tu API KEY de VirusTotal:
+
+```python
+import requests, os, time, hashlib
+
+API_KEY = 'TU_API_KEY'
+FILE_DIR = '/var/lib/suricata/files/'
+PROCESSED_DIR = '/var/lib/suricata/processed_files/'
+LOG_FILE = '/var/lib/suricata/virustotal_uploads.log'
+
+os.makedirs(PROCESSED_DIR, exist_ok=True)
+
+for filename in os.listdir(FILE_DIR):
+    filepath = os.path.join(FILE_DIR, filename)
+    with open(filepath, 'rb') as f:
+        file_data = f.read()
+    sha256 = hashlib.sha256(file_data).hexdigest()
+    files = {'file': (filename, file_data)}
+    headers = {'x-apikey': API_KEY}
+    response = requests.post('https://www.virustotal.com/api/v3/files', files=files, headers=headers)
+    analysis_id = response.json()['data']['id']
+    print(f"[+] Subido: {filepath} - Analysis ID: {analysis_id}")
+    # Esperar análisis (opcional)
+    for _ in range(5):
+        time.sleep(5)
+        report = requests.get(f'https://www.virustotal.com/api/v3/analyses/{analysis_id}', headers=headers)
+        if report.json()['data']['attributes']['status'] == 'completed':
+            break
+        print("[*] Esperando análisis...")
+    link = f"https://www.virustotal.com/gui/file/{sha256}/detection"
+    print(f"[+] SHA256: {sha256}")
+    with open(LOG_FILE, 'a') as log:
+        log.write(f"{filepath},{sha256},{link}
+")
+    os.rename(filepath, os.path.join(PROCESSED_DIR, filename))
+```
+
+- Hazlo ejecutable:  
+  ```sh
+  sudo chmod +x /opt/upload_to_virustotal.py
+  ```
+- Programa su ejecución automática (cada 5 min):  
+  ```sh
+  crontab -e
+  # Añade:
+  */5 * * * * /usr/bin/python3 /opt/upload_to_virustotal.py
+  ```
+
+---
+
+#### **2. Consulta automática de resultados**
+
+El log `/var/lib/suricata/virustotal_uploads.log` guarda para cada archivo:
+
+```
+<ruta>,<sha256>,<enlace de VirusTotal>
+```
+Ejemplo:
+```
+/var/lib/suricata/files/eicar.com,131f95c51cc819465fa1797f6ccacf9d49aaaff46fa3eac73ae63ffbbdf8267,https://www.virustotal.com/gui/file/131f95c51cc819465fa1797f6ccacf9d49aaaff46fa3eac73ae63ffbbdf8267/detection
+```
+
+---
+
+### **Prueba realista de laboratorio**
+
+1. Genera un archivo de test EICAR en Kali Red Team:
+   ```sh
+   echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > eicar.com
+   python3 -m http.server 8080
+   ```
+2. Desde Kali Purple, descarga el archivo:
+   ```sh
+   wget http://xxx.xxx.xxx.xxx:8080/eicar.com
+   ```
+3. El archivo será extraído, subido a VirusTotal y el enlace generado en el log.
+4. **Consulta el enlace y verás detección real de malware en VirusTotal.**
+![image](https://github.com/user-attachments/assets/47271fa5-59d8-453b-87fc-a86cc998dc27)
+![image](https://github.com/user-attachments/assets/2b616fa2-68ef-4298-9e9f-b3f38ecef712)
+![image](https://github.com/user-attachments/assets/3717e59a-0bbc-44de-8512-b1443eaeac3d)
+![image](https://github.com/user-attachments/assets/63c5d37b-485a-476e-a43b-ee3fb2a9701d)
+![image](https://github.com/user-attachments/assets/90854506-f8a5-4002-937e-76f92c9f1dd7)
+
+
 
 ---
 
@@ -241,9 +340,9 @@ sudo filebeat test output
 
 | Componente       | IP              | Estado                                 | Función                             |
 |------------------|------------------|----------------------------------------|-------------------------------------|
-| Kali Purple      | 192.168.222.128 | ✅ Suricata + Filebeat activo          | Detección de tráfico malicioso      |
-| Kali Red Team    | 192.168.222.131 | ✅ Agente Wazuh                         | Generación de ataques               |
-| Wazuh Manager    | 192.168.222.140 | ✅ Wazuh + Dashboard + Elastic         | Recepción, análisis y visualización |
+| Kali Purple      | xxx.xxx.xxx.xxx | ✅ Suricata + Filebeat activo          | Detección de tráfico malicioso      |
+| Kali Red Team    | xxx.xxx.xxx.xxx | ✅ Agente Wazuh                         | Generación de ataques               |
+| Wazuh Manager    | xxx.xxx.xxx.xxx | ✅ Wazuh + Dashboard + Elastic         | Recepción, análisis y visualización |
 
 ---
 
